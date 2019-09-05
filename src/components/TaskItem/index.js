@@ -5,10 +5,13 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class TaskItem extends Component {
     render() {
-        const {task, status, classes}=this.props
+        const { task, status, classes } = this.props
         const { title } = task
         return (
             <div>
@@ -24,11 +27,16 @@ class TaskItem extends Component {
                                 {status.label}
                             </Grid>
                         </Grid>
+                        <p>{task.description}</p>
                     </CardContent>
-                    <CardActions>
-                        <Button size="small">
-
-                        </Button>
+                    <CardActions className={classes.cardActions}>
+                        <Button size="small"></Button>
+                        <Fab color="secondary" aria-label="Edit" className={classes.fab} size="small">
+                            <EditIcon />
+                        </Fab>
+                        <Fab aria-label="delete" className={classes.fab} size="small">
+                            <DeleteIcon />
+                        </Fab>
                     </CardActions>
                 </Card>
             </div>
