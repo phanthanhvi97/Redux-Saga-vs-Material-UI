@@ -7,7 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import { STATUSES } from '../../constants'
 import TaskList from '../../components/TaskList'
 import TaskForm from '../../components/TaskForm'
-
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import * as taskActions from '../../actions/task'
 
 const listTask = [
     {
@@ -36,6 +38,11 @@ class TaskBoard extends Component {
         this.state = {
             open: false
         }
+    }
+    componentDidMount(){
+        const {taskActionCreators}=this.props
+        const {fetchListTaskRequest} = taskActionCreators
+        fetchListTaskRequest()
     }
     handleClose=()=>{
         this.setState({
@@ -83,4 +90,11 @@ class TaskBoard extends Component {
         )
     }
 }
-export default withStyles(styles)(TaskBoard)
+
+const mapStateToProps=null
+const mapDispatchToProps=dispatch=>{
+    return{
+        taskActionCreators:bindActionCreators(taskActions,dispatch)
+    }
+}
+export default withStyles(styles)(connect(mapStateToProps,mapDispatchToProps)(TaskBoard))
