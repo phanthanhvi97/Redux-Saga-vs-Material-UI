@@ -1,36 +1,15 @@
-import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
-import styles from './styles'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import AddIcon from "@material-ui/icons/Add"
-import Grid from '@material-ui/core/Grid';
-import { STATUSES } from '../../constants'
-import TaskList from '../../components/TaskList'
-import TaskForm from '../../components/TaskForm'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import * as taskActions from '../../actions/task'
-
-const listTask = [
-    {
-        id: 1,
-        title: "Read book",
-        description: "Read material book",
-        status: 0
-    },
-    {
-        id: 2,
-        title: "Read",
-        description: "Read",
-        status: 2
-    },
-    {
-        id: 3,
-        title: "book",
-        description: "book",
-        status: 1
-    }
-]
+import TaskForm from '../../components/TaskForm'
+import TaskList from '../../components/TaskList'
+import { STATUSES } from '../../constants'
+import styles from './styles'
 class TaskBoard extends Component {
     constructor(props) {
         super(props)
@@ -39,23 +18,26 @@ class TaskBoard extends Component {
             open: false
         }
     }
-    componentDidMount(){
-        const {taskActionCreators}=this.props
-        const {fetchListTaskRequest} = taskActionCreators
-        fetchListTaskRequest()
+    componentDidMount() {
+        const { taskActionCreators } = this.props
+        // const { fetchListTaskRequest } = taskActionCreators
+        const { fetchListTask } = taskActionCreators
+        // fetchListTaskRequest()
+        fetchListTask()
+
     }
-    handleClose=()=>{
+    handleClose = () => {
         this.setState({
-            open:false
+            open: false
         })
     }
-    openForm=()=>{
+    openForm = () => {
         this.setState({
-            open:true
+            open: true
         })
     }
     renderBoard() {
-        // const { classes } = this.props
+        const { listTask } = this.props
         let xhtml = null
         xhtml = (
             <Grid container spacing={2}>
@@ -73,7 +55,7 @@ class TaskBoard extends Component {
         const { open } = this.state
         let xhtml = null
         xhtml = (
-            <TaskForm open={open} onClose={this.handleClose}/>
+            <TaskForm open={open} onClose={this.handleClose} />
         )
         return xhtml
     }
@@ -91,10 +73,14 @@ class TaskBoard extends Component {
     }
 }
 
-const mapStateToProps=null
-const mapDispatchToProps=dispatch=>{
-    return{
-        taskActionCreators:bindActionCreators(taskActions,dispatch)
+const mapStateToProps = state => {
+    return {
+        listTask: state.task.listTask
     }
 }
-export default withStyles(styles)(connect(mapStateToProps,mapDispatchToProps)(TaskBoard))
+const mapDispatchToProps = dispatch => {
+    return {
+        taskActionCreators: bindActionCreators(taskActions, dispatch)
+    }
+}
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TaskBoard))
