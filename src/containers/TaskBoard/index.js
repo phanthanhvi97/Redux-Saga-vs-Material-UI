@@ -10,6 +10,8 @@ import TaskForm from '../../components/TaskForm'
 import TaskList from '../../components/TaskList'
 import { STATUSES } from '../../constants'
 import styles from './styles'
+import SearchBox from '../../components/SearchBox'
+
 class TaskBoard extends Component {
     constructor(props) {
         super(props)
@@ -59,6 +61,19 @@ class TaskBoard extends Component {
         )
         return xhtml
     }
+    handleFilter=(e)=>{
+        const {value} = e.target
+        const { taskActionCreators } = this.props
+        const { filterTask } = taskActionCreators
+        filterTask(value)
+    }
+    renderSearchBox(){
+        let xhtml=null
+        xhtml=(
+            <SearchBox handleChange={this.handleFilter}/>
+        )
+        return xhtml
+    }
     render() {
         const { classes } = this.props
         return (
@@ -66,6 +81,7 @@ class TaskBoard extends Component {
                 <Button variant="contained" color="primary" className="classes.button" onClick={this.openForm}>
                     <AddIcon />Thêm mới công việc
                 </Button>
+                {this.renderSearchBox()}
                 {this.renderBoard()}
                 {this.renderForm()}
             </div>
