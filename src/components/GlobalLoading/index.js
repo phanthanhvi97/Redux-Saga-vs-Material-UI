@@ -10,7 +10,6 @@ class GlobalLoading extends Component {
     render() {
         const { classes, showLoading } = this.props
         let xhtml = null
-        // console.log(showLoading.showLoading)
         if (showLoading.showLoading) {
             xhtml = (
                 <div className={classes.globalLoading}>
@@ -27,11 +26,6 @@ const mapStateToProps = state => {
         showLoading: state.ui
     }
 }
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         uiAction: bindActionCreators(uiAction, dispatch)
-//     }
-// }
 const withConnect = connect(mapStateToProps, null)
 // export default withStyles(styles)(withConnect)(GlobalLoading)
 export default compose(

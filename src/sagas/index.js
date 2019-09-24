@@ -21,7 +21,6 @@ function* watchFetchListTaskAction() {
             yield put(fetchListTaskSuccess(data))
             //cung blocking
             toast.toastSuccess()
-
         } else {
             //dispatch cai failed
             yield put(fetchListTaskFailed(data))

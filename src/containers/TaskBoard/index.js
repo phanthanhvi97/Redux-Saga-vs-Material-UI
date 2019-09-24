@@ -11,6 +11,7 @@ import TaskList from '../../components/TaskList'
 import { STATUSES } from '../../constants'
 import styles from './styles'
 import SearchBox from '../../components/SearchBox'
+import * as modalActions from '../../actions/modal'
 
 class TaskBoard extends Component {
     constructor(props) {
@@ -34,9 +35,10 @@ class TaskBoard extends Component {
         })
     }
     openForm = () => {
-        this.setState({
-            open: true
-        })
+        const {modalActions}=this.props
+        const {showModal, changeModalTitle,changeModalContent}= modalActions
+        showModal()
+        changeModalTitle('Them moi cong viec')
     }
     renderBoard() {
         const { listTask } = this.props
@@ -96,7 +98,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        taskActionCreators: bindActionCreators(taskActions, dispatch)
+        taskActionCreators: bindActionCreators(taskActions, dispatch),
+        modalActions: bindActionCreators(modalActions,dispatch)
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TaskBoard))

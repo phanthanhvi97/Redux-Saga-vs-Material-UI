@@ -10,6 +10,7 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GlobalLoading from '../../components/GlobalLoading';
 
+
 const store = configureStore()
 class App extends Component {
   render() {
