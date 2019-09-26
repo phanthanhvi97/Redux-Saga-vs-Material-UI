@@ -14,13 +14,6 @@ import SearchBox from '../../components/SearchBox'
 import * as modalActions from '../../actions/modal'
 
 class TaskBoard extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            open: false
-        }
-    }
     componentDidMount() {
         const { taskActionCreators } = this.props
         // const { fetchListTaskRequest } = taskActionCreators
@@ -29,16 +22,12 @@ class TaskBoard extends Component {
         fetchListTask()
 
     }
-    handleClose = () => {
-        this.setState({
-            open: false
-        })
-    }
     openForm = () => {
-        const {modalActions}=this.props
-        const {showModal, changeModalTitle,changeModalContent}= modalActions
+        const {modalActionCreators}=this.props
+        const {showModal, changeModalTitle,changeModalContent}= modalActionCreators
         showModal()
         changeModalTitle('Them moi cong viec')
+        changeModalContent(<TaskForm/>)
     }
     renderBoard() {
         const { listTask } = this.props
@@ -52,14 +41,6 @@ class TaskBoard extends Component {
                     })
                 }
             </Grid>
-        )
-        return xhtml
-    }
-    renderForm() {
-        const { open } = this.state
-        let xhtml = null
-        xhtml = (
-            <TaskForm open={open} onClose={this.handleClose} />
         )
         return xhtml
     }
@@ -85,7 +66,7 @@ class TaskBoard extends Component {
                 </Button>
                 {this.renderSearchBox()}
                 {this.renderBoard()}
-                {this.renderForm()}
+                {/* {this.renderForm()} */}
             </div>
         )
     }
@@ -99,7 +80,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         taskActionCreators: bindActionCreators(taskActions, dispatch),
-        modalActions: bindActionCreators(modalActions,dispatch)
+        modalActionCreators: bindActionCreators(modalActions,dispatch)
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TaskBoard))
