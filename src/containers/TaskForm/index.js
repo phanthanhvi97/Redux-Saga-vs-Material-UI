@@ -7,12 +7,13 @@ import * as modalActions from '../../actions/modal'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import renderTextField from '../../components/FormHelper/TextField'
+import validate from './validate'
 class TaskForm extends Component {
     handleSubmitForm = data => {
         console.log(data)
     }
     render() {
-        const { classes, modalActionCreators, handleSubmit } = this.props
+        const { classes, modalActionCreators, handleSubmit, invalid, submitting} = this.props
         const { hideModal } = modalActionCreators
         return (
             <form onSubmit={handleSubmit(this.handleSubmitForm)}>
@@ -25,6 +26,7 @@ class TaskForm extends Component {
                             margin="normal"
                             name="title"
                             component={renderTextField}
+                            validate={this.required, this.minLength5}
                         />
                     </Grid>
                     <Grid item md={12}>
@@ -41,7 +43,7 @@ class TaskForm extends Component {
                     </Grid>
                     <Grid item md={12}>
                         <Box display="flex" flexDirection="row-reverse" mt={1}>
-                            <Button variant="contained" color="primary" type='submit'>Save</Button>
+                            <Button disabled={invalid||submitting} variant="contained" color="primary" type='submit'>Save</Button>
                             <Box mr={1}>
                                 <Button variant="contained" color="secondary" onClick={hideModal}>Cancel</Button>
                             </Box>
@@ -58,6 +60,7 @@ const mapDispatchToProps = dispatch => ({
 const FORM_NAME = 'TASK_MANAGEMENT'
 const withConnect = connect(null, mapDispatchToProps)
 const withReduxForm = reduxForm({
-    form: FORM_NAME
+    form: FORM_NAME,
+    validate
 })
 export default compose(withStyles(styles), withConnect, withReduxForm)(TaskForm)
