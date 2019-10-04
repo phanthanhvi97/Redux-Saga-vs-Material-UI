@@ -1,11 +1,11 @@
-import { call, delay, fork, put, select, take, takeLatest } from 'redux-saga/effects'
-import { fetchListTaskFailed, fetchListTaskSuccess, filterTaskSuccess } from '../actions/task'
+import { call, delay, fork, put, select, take, takeLatest, takeEvery} from 'redux-saga/effects'
+import { fetchListTaskFailed, fetchListTaskSuccess, filterTaskSuccess, addTaskSuccess, addTaskFailed } from '../actions/task'
 import { hideLoading, showLoading } from '../actions/ui'
-import { getList } from '../apis/task'
-import { STATUS_CODE } from '../constants'
+import { getList, addTask } from '../apis/task'
+import { STATUS_CODE, STATUSES } from '../constants'
 import * as taskConstants from '../constants/task'
 import * as toast from '../helper/toastHelper'
-
+import {hideModal} from '../actions/modal'
 //delay cung la blocking
 function* watchFetchListTaskAction() {
     while (true) {
@@ -38,8 +38,29 @@ function* filterTaskSaga({payload}){
     // console.log(filteredTask)
     yield put(filterTaskSuccess(filteredTask))
 }
+function* addTaskSaga({payload}){
+    const {title, description} = payload
+    yield put(showLoading())
+    const resp=yield call(addTask,{
+        title,
+        description,
+        status:STATUSES[0].value
+    })
+    const {data, status}=resp
+    if(status===STATUS_CODE.CREATED){
+        yield put(addTaskSuccess(data))
+        yield put(hideModal())
+    }else{
+        yield put(addTaskFailed(data))
+    }
+    yield delay(1000)
+    yield put(hideLoading())
+
+}
 function* rootSaga() {
     yield fork(watchFetchListTaskAction)
     yield takeLatest(taskConstants.FILTER_TASK,filterTaskSaga)
+    yield takeEvery(taskConstants.ADD_TASK,addTaskSaga)
+
 }
 export default rootSaga

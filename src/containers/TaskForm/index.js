@@ -1,16 +1,19 @@
 import { Box, Button, Grid, withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import { Field, reduxForm } from 'redux-form';
+import * as modalActions from '../../actions/modal';
+import renderTextField from '../../components/FormHelper/TextField';
 import styles from './styles';
-import { compose, bindActionCreators } from 'redux'
-import * as modalActions from '../../actions/modal'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import renderTextField from '../../components/FormHelper/TextField'
-import validate from './validate'
+import validate from './validate';
+import * as taskActions from '../../actions/task'
 class TaskForm extends Component {
     handleSubmitForm = data => {
-        console.log(data)
+        const {taskActionCreators} = this.props
+        const {addTask} = taskActionCreators
+        const {title, description} = data
+        addTask(title, description)
     }
     render() {
         const { classes, modalActionCreators, handleSubmit, invalid, submitting} = this.props
@@ -26,7 +29,6 @@ class TaskForm extends Component {
                             margin="normal"
                             name="title"
                             component={renderTextField}
-                            validate={this.required, this.minLength5}
                         />
                     </Grid>
                     <Grid item md={12}>
@@ -55,7 +57,8 @@ class TaskForm extends Component {
     }
 }
 const mapDispatchToProps = dispatch => ({
-    modalActionCreators: bindActionCreators(modalActions, dispatch)
+    modalActionCreators: bindActionCreators(modalActions, dispatch),
+    taskActionCreators:bindActionCreators(taskActions,dispatch)
 })
 const FORM_NAME = 'TASK_MANAGEMENT'
 const withConnect = connect(null, mapDispatchToProps)
